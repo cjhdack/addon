@@ -1,3 +1,7 @@
+	"name": "KT Add-ons",
+	"url": "https://github.com/ktdo79/addons",
+	"maintainer": "KT <ktdo79@gmail.com>
+
 # KT Add-ons for HAOS
  
 HAKorea Addon 및 일부 Addon을 개인 환경(Ezville)에 맞춰 수정 중
