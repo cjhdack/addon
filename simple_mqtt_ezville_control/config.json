@@ -1,6 +1,6 @@
 {
   "name": "MQTT 기반 Simple EzVille Wallpad Control modi",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "slug": "simple_mqtt_ezville_control",
   "url": "https://github.com/cjhdack/addons",
   "description": "MQTT 통신을 활용한 간단화된 EzVille 월패드 컨트롤러 modi",
