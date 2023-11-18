@@ -506,7 +506,7 @@ def ezville_loop(config):
                                     await asyncio.sleep(DISCOVERY_DELAY)                                
 
                                 onoff = 'ON' if int(packet[12:14], 16) == 1 else 'OFF'
-                                speedonoff = 'LOW' if int(packet[14:16], 16) == 1 elif int(packet[14:16], 16) == 2 'NORMAL' elif int(packet[14:16], 16) == 3 'HIGH'
+                                speedonoff = 'LOW' if int(packet[14:16], 16) == 1 elif int(packet[14:16], 16) == 2 'NORMAL' else int(packet[14:16], 16) == 3 'HIGH'
                                 modeonoff = 'NORMAL' if int(packet[16:18], 16) == 1 elif int(packet[16:18], 16) == 3 'HEAT'
                                         
                                 await update_state(name, 'power', rid, spc, onoff)
