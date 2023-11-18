@@ -749,7 +749,7 @@ def ezville_loop(config):
                     if topics[2] == 'power':
                         pwr = '01' if value == 'ON' else '00'
 
-                        sendcmd = checksum('F7' + RS485_DEVICE[device]['power']['id'] + '01' + RS485_DEVICE[device]['power']['cmd'] + '01' + pwr)
+                        sendcmd = checksum('F7' + RS485_DEVICE[device]['power']['id'] + '01' + RS485_DEVICE[device]['power']['cmd'] + '01' + pwr + '0000')
                         recvcmd = 'F7' + RS485_DEVICE[device]['power']['id'] + '01' + RS485_DEVICE[device]['power']['ack']
                         statcmd = [key, value]
 
@@ -763,7 +763,7 @@ def ezville_loop(config):
                         if value in speed_list:
                             index = speed_list.index(value)
 
-                            sendcmd = checksum('F7' + RS485_DEVICE[device]['speed']['id'] + '01' + RS485_DEVICE[device]['speed']['cmd'] + '010' + index)
+                            sendcmd = checksum('F7' + RS485_DEVICE[device]['speed']['id'] + '01' + RS485_DEVICE[device]['speed']['cmd'] + '010' + index + '0000')
                             recvcmd = 'F7' + RS485_DEVICE[device]['speed']['id'] + '01' + RS485_DEVICE[device]['speed']['ack']
                             statcmd = [key, value]
     
@@ -777,7 +777,7 @@ def ezville_loop(config):
                         if value in mode_list:
                             index = mode_list.index(value)
 
-                            sendcmd = checksum('F7' + RS485_DEVICE[device]['mode']['id'] + '01' + RS485_DEVICE[device]['mode']['cmd'] + '010' + index)
+                            sendcmd = checksum('F7' + RS485_DEVICE[device]['mode']['id'] + '01' + RS485_DEVICE[device]['mode']['cmd'] + '010' + index + '0000')
                             recvcmd = 'F7' + RS485_DEVICE[device]['mode']['id'] + '01' + RS485_DEVICE[device]['mode']['ack']
                             statcmd = [key, value]
     
