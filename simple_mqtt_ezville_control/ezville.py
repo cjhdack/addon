@@ -89,7 +89,7 @@ DISCOVERY_PAYLOAD = {
         'cmd_t': '~/power/command',
         'spd_stat_t': '~/speed/state',
         'spd_cmd_t': '~/speed/command',
-        'speeds': [ 'LOW', 'MEDIUM', 'HIGH' ],
+        'speeds': [ 'LOW', 'MEDIUM', 'HIGH', 'OFF' ],
         'modes': [ 'NORMAL','HEAT' ]
     } ],
     'plug': [ {
@@ -516,6 +516,8 @@ def ezville_loop(config):
                                     modeonoff = 'NORMAL'
                                 elif int(packet[16:18], 16) == 3:
                                     modeonoff = 'HEAT'
+                                elif int(packet[16:18], 16) == 0:
+                                    modeonoff = 'OFF'
                                         
                                 await update_state(name, 'power', rid, spc, onoff)
                                 await update_state(name, 'speed', rid, spc, speedonoff)
