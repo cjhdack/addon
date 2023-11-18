@@ -83,8 +83,8 @@ DISCOVERY_PAYLOAD = {
     } ],
     'fan': [ {
         '_intg': 'fan',
-        '~': 'ezville/fan',
-        'name': 'ezville_fan',
+        '~': 'ezville/fan_{:0>2d}_{:0>2d}',
+        'name': 'ezville_fan_{:0>2d}_{:0>2d}',
         'stat_t': '~/power/state',
         'cmd_t': '~/power/command',
         'spd_stat_t': '~/speed/state',
