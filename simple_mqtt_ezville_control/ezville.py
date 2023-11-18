@@ -512,12 +512,12 @@ def ezville_loop(config):
                                     speedonoff = 'NORMAL'
                                 elif int(packet[14:16], 16) == 3:
                                     speedonoff = 'HIGH'
+                                elif int(packet[14:16], 16) == 0:
+                                    speedonoff = 'OFF'
                                 if int(packet[16:18], 16) == 1:
                                     modeonoff = 'NORMAL'
                                 elif int(packet[16:18], 16) == 3:
                                     modeonoff = 'HEAT'
-                                elif int(packet[16:18], 16) == 0:
-                                    modeonoff = 'OFF'
                                         
                                 await update_state(name, 'power', rid, spc, onoff)
                                 await update_state(name, 'speed', rid, spc, speedonoff)
