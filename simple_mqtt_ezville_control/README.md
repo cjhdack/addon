@@ -1,4 +1,4 @@
-# MQTT 기반 Simple EzVille Wallpad Control mode
+# MQTT 기반 Simple EzVille Wallpad Control modi
 
 ## 1. 지원 기능
 
