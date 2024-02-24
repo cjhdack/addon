@@ -1,5 +1,4 @@
 import paho.mqtt.client as mqtt
-from paho.mqtt.enums import MQTTProtocolVersion
 import json
 import time
 import asyncio
