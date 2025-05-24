@@ -1043,7 +1043,7 @@ def ezville_loop(config):
     mqtt_client.on_disconnect = on_disconnect
     mqtt_client.on_message = on_message
     mqtt_client.connect_async(config['mqtt_server'])
-    mqtt_client.subscribe(\"#\")  # DEBUG: subscribe to all topics
+    mqtt_client.subscribe("#")  # DEBUG: subscribe to all topics
     
     # asyncio loop 획득 및 EW11 오류시 재시작 task 등록
     loop = asyncio.get_event_loop()
