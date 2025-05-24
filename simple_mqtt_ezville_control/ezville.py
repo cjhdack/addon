@@ -303,7 +303,7 @@ def ezville_loop(config):
         
     # MQTT 메시지 Callback
     def on_message(client, userdata, msg):
-        log(f"[DEBUG] MQTT message received: topic={msg.topic}, payload={msg.payload}")        
+        #log(f"[DEBUG] MQTT message received: topic={msg.topic}, payload={msg.payload}")        
         if msg.topic == 'homeassistant/status':
             # Reboot Control 사용 시 MQTT Integration의 Birth/Last Will Testament Topic은 바로 처리
             if REBOOT_CONTROL:
@@ -850,6 +850,8 @@ def ezville_loop(config):
         log("[DEBUG] send_to_ew11() 실행됨")  # 🔥 여기에 추가
         log(f"[DEBUG] comm_mode={comm_mode}")
         log(f"[DEBUG] 보낼 명령 = {send_data['sendcmd']}")
+        log(f"[DEBUG] 실제 송신 바이트: {bytes.fromhex(send_data['sendcmd'])}")
+        log(f"[DEBUG] statcmd check → expected={send_data['statcmd'][1]}, current={DEVICE_STATE.get(send_data['statcmd'][0])}")
             
         for i in range(CMD_RETRY_COUNT):
             if ew11_log:
