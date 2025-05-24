@@ -847,6 +847,9 @@ def ezville_loop(config):
                                                 
     # HA에서 전달된 명령을 EW11 패킷으로 전송
     async def send_to_ew11(send_data):
+        log("[DEBUG] send_to_ew11() 실행됨")  # 🔥 여기에 추가
+        log(f"[DEBUG] comm_mode={comm_mode}")
+        log(f"[DEBUG] 보낼 명령 = {send_data['sendcmd']}")
             
         for i in range(CMD_RETRY_COUNT):
             if ew11_log:
@@ -994,9 +997,11 @@ def ezville_loop(config):
             await asyncio.sleep(STATE_LOOP_DELAY)
             
             
-    async def command_loop():        
+    async def command_loop():    
+        nonlocal CMD_QUEUE
         while True:
             if not CMD_QUEUE.empty():
+                log("[DEBUG] command_loop(): CMD_QUEUE에서 명령 꺼냄") 
                 send_data = await CMD_QUEUE.get()
                 await send_to_ew11(send_data)               
             
