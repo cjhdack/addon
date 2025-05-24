@@ -1005,7 +1005,8 @@ def ezville_loop(config):
  
 
     # EW11 재실행 시 리스타트 실시
-    async def restart_control():        
+    async def restart_control():     
+        nonlocal restart_flag, MQTT_ONLINE, ADDON_STARTED
         while True:
             if restart_flag or (not MQTT_ONLINE and ADDON_STARTED and REBOOT_CONTROL):
                 if restart_flag:
