@@ -281,7 +281,7 @@ def ezville_loop(config):
 
     # MQTT 통신 연결 Callback
     def on_connect(client, userdata, flags, reasonCode, properties):
-        if rc == 0:
+        if reasonCode == 0:
             log('[INFO] MQTT Broker 연결 성공')
             # Socket인 경우 MQTT 장치의 명령 관련과 MQTT Status (Birth/Last Will Testament) Topic만 구독
             if comm_mode == 'socket':
@@ -293,12 +293,12 @@ def ezville_loop(config):
             else:
                 client.subscribe([(HA_TOPIC + '/#', 0), (EW11_TOPIC + '/recv', 0), (EW11_TOPIC + '/send', 1), ('homeassistant/status', 0)])
         else:
-            errcode = {1: 'Connection refused - incorrect protocol version',
+            erreasonCodeode = {1: 'Connection refused - incorrect protocol version',
                        2: 'Connection refused - invalid client identifier',
                        3: 'Connection refused - server unavailable',
                        4: 'Connection refused - bad username or password',
                        5: 'Connection refused - not authorised'}
-            log(errcode[rc])
+            log(erreasonCodeode[reasonCode])
          
         
     # MQTT 메시지 Callback
@@ -327,7 +327,7 @@ def ezville_loop(config):
  
 
     # MQTT 통신 연결 해제 Callback
-    def on_disconnect(client, userdata, rc):
+    def on_disconnect(client, userdata, reasonCode):
         log('INFO: MQTT 연결 해제')
         pass
 
@@ -438,22 +438,22 @@ def ezville_loop(config):
                                                                                     
                             elif name == 'thermostat':
                                 # room 갯수
-                                rc = int((int(packet[8:10], 16) - 5) / 2)
+                                reasonCode = int((int(packet[8:10], 16) - 5) / 2)
                                 # room의 조절기 수 (현재 하나 뿐임)
-                                src = 1
+                                sreasonCode = 1
                                 
                                 onoff_state = bin(int(packet[12:14], 16))[2:].zfill(8)
                                 away_state = bin(int(packet[14:16], 16))[2:].zfill(8)
                                 
-                                for rid in range(1, rc + 1):
-                                    discovery_name = '{}_{:0>2d}_{:0>2d}'.format(name, rid, src)
+                                for rid in range(1, reasonCode + 1):
+                                    discovery_name = '{}_{:0>2d}_{:0>2d}'.format(name, rid, sreasonCode)
                                     
                                     if discovery_name not in DISCOVERY_LIST:
                                         DISCOVERY_LIST.append(discovery_name)
                                     
                                         payload = DISCOVERY_PAYLOAD[name][0].copy()
-                                        payload['~'] = payload['~'].format(rid, src)
-                                        payload['name'] = payload['name'].format(rid, src)
+                                        payload['~'] = payload['~'].format(rid, sreasonCode)
+                                        payload['name'] = payload['name'].format(rid, sreasonCode)
                                    
                                         # 장치 등록 후 DISCOVERY_DELAY초 후에 State 업데이트
                                         await mqtt_discovery(payload)
@@ -472,9 +472,9 @@ def ezville_loop(config):
 #                                    else:
 #                                        onoff = 'off'
 
-                                    await update_state(name, 'power', rid, src, onoff)
-                                    await update_state(name, 'curTemp', rid, src, curT)
-                                    await update_state(name, 'setTemp', rid, src, setT)
+                                    await update_state(name, 'power', rid, sreasonCode, onoff)
+                                    await update_state(name, 'curTemp', rid, sreasonCode, curT)
+                                    await update_state(name, 'setTemp', rid, sreasonCode, setT)
                                     
                                 # 직전 처리 State 패킷은 저장
                                 if STATE_PACKET:
@@ -929,10 +929,13 @@ def ezville_loop(config):
         ew11 = telnetlib.Telnet(ew11_server)
 
         ew11.read_until(b'login:')
-        ew11.write(ew11_id.encode('utf-8') + b'\n')
+        ew11.write(ew11_id.encode('utf-8') + b'
+')
         ew11.read_until(b'password:')
-        ew11.write(ew11_password.encode('utf-8') + b'\n')
-        ew11.write('Restart'.encode('utf-8') + b'\n')
+        ew11.write(ew11_password.encode('utf-8') + b'
+')
+        ew11.write('Restart'.encode('utf-8') + b'
+')
         ew11.read_until(b'Restart..')
         
         log('[INFO] EW11 리셋 완료')
@@ -990,8 +993,8 @@ def ezville_loop(config):
         
         
     async def state_update_loop():
-        nonlocal force_target_time
-        nonlocal force_stop_time
+        nonlocal foreasonCodee_target_time
+        nonlocal foreasonCodee_stop_time
         nonlocal FORCE_UPDATE
         
         while True:
@@ -1000,14 +1003,14 @@ def ezville_loop(config):
             timestamp = time.time()
             
             # 정해진 시간이 지나면 FORCE 모드 발동
-            if timestamp > force_target_time and not FORCE_UPDATE and FORCE_MODE:
-                force_stop_time = timestamp + FORCE_DURATION
+            if timestamp > foreasonCodee_target_time and not FORCE_UPDATE and FORCE_MODE:
+                foreasonCodee_stop_time = timestamp + FORCE_DURATION
                 FORCE_UPDATE = True
                 log('[INFO] 상태 강제 업데이트 실시')
                 
             # 정해진 시간이 지나면 FORCE 모드 종료    
-            if timestamp > force_stop_time and FORCE_UPDATE and FORCE_MODE:
-                force_target_time = timestamp + FORCE_PERIOD
+            if timestamp > foreasonCodee_stop_time and FORCE_UPDATE and FORCE_MODE:
+                foreasonCodee_target_time = timestamp + FORCE_PERIOD
                 FORCE_UPDATE = False
                 log('[INFO] 상태 강제 업데이트 종료')
                 
@@ -1078,8 +1081,8 @@ def ezville_loop(config):
     loop.create_task(restart_control())
         
     # Discovery 및 강제 업데이트 시간 설정
-    force_target_time = time.time() + FORCE_PERIOD
-    force_stop_time = force_target_time + FORCE_DURATION
+    foreasonCodee_target_time = time.time() + FORCE_PERIOD
+    foreasonCodee_stop_time = foreasonCodee_target_time + FORCE_DURATION
     
 
     while True:
