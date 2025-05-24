@@ -1001,14 +1001,14 @@ def ezville_loop(config):
             timestamp = time.time()
             
             # 정해진 시간이 지나면 FORCE 모드 발동
-            if timestamp > foreasonCodee_target_time and not FORCE_UPDATE and FORCE_MODE:
-                foreasonCodee_stop_time = timestamp + FORCE_DURATION
+            if timestamp > force_target_time and not FORCE_UPDATE and FORCE_MODE:
+                force_stop_time = timestamp + FORCE_DURATION
                 FORCE_UPDATE = True
                 log('[INFO] 상태 강제 업데이트 실시')
                 
             # 정해진 시간이 지나면 FORCE 모드 종료    
-            if timestamp > foreasonCodee_stop_time and FORCE_UPDATE and FORCE_MODE:
-                foreasonCodee_target_time = timestamp + FORCE_PERIOD
+            if timestamp > force_stop_time and FORCE_UPDATE and FORCE_MODE:
+                force_target_time = timestamp + FORCE_PERIOD
                 FORCE_UPDATE = False
                 log('[INFO] 상태 강제 업데이트 종료')
                 
@@ -1080,8 +1080,8 @@ def ezville_loop(config):
     loop.create_task(restart_control())
         
     # Discovery 및 강제 업데이트 시간 설정
-    foreasonCodee_target_time = time.time() + FORCE_PERIOD
-    foreasonCodee_stop_time = foreasonCodee_target_time + FORCE_DURATION
+    force_target_time = time.time() + FORCE_PERIOD
+    force_stop_time = force_target_time + FORCE_DURATION
     
 
     while True:
