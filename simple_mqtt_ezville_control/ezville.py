@@ -293,16 +293,19 @@ def ezville_loop(config):
             else:
                 client.subscribe([(HA_TOPIC + '/#', 0), (EW11_TOPIC + '/recv', 0), (EW11_TOPIC + '/send', 1), ('homeassistant/status', 0)])
         else:
-            erreasonCodeode = {1: 'Connection refused - incorrect protocol version',
+            errcode = {1: 'Connection refused - incorrect protocol version',
                        2: 'Connection refused - invalid client identifier',
                        3: 'Connection refused - server unavailable',
                        4: 'Connection refused - bad username or password',
                        5: 'Connection refused - not authorised'}
-            log(erreasonCodeode[reasonCode])
+            log(errcode[reasonCode])
          
         
     # MQTT 메시지 Callback
     def on_message(client, userdata, msg):
+    log(f"[DEBUG] MQTT message received: topic={message.topic}, payload={message.payload}")
+
+
         nonlocal MSG_QUEUE
         nonlocal MQTT_ONLINE
         nonlocal startup_delay
@@ -327,7 +330,7 @@ def ezville_loop(config):
  
 
     # MQTT 통신 연결 해제 Callback
-    def on_disconnect(client, userdata, reasonCode):
+    def on_disconnect(client, userdata, reasonCode, properties):
         log('INFO: MQTT 연결 해제')
         pass
 
@@ -929,10 +932,13 @@ def ezville_loop(config):
         ew11 = telnetlib.Telnet(ew11_server)
 
         ew11.read_until(b'login:')
-        ew11.write(ew11_id.encode('utf-8') + b'\n')
+        ew11.write(ew11_id.encode('utf-8') + b'
+')
         ew11.read_until(b'password:')
-        ew11.write(ew11_password.encode('utf-8') + b'\n')
-        ew11.write('Restart'.encode('utf-8') + + b'\n')
+        ew11.write(ew11_password.encode('utf-8') + b'
+')
+        ew11.write('Restart'.encode('utf-8') + b'
+')
         ew11.read_until(b'Restart..')
         
         log('[INFO] EW11 리셋 완료')
@@ -1072,6 +1078,7 @@ def ezville_loop(config):
     mqtt_client.on_disconnect = on_disconnect
     mqtt_client.on_message = on_message
     mqtt_client.connect_async(config['mqtt_server'])
+    mqtt_client.subscribe(\"#\")  # DEBUG: subscribe to all topics
     
     # asyncio loop 획득 및 EW11 오류시 재시작 task 등록
     loop = asyncio.get_event_loop()
