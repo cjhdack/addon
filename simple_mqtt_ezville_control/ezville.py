@@ -929,13 +929,10 @@ def ezville_loop(config):
         ew11 = telnetlib.Telnet(ew11_server)
 
         ew11.read_until(b'login:')
-        ew11.write(ew11_id.encode('utf-8') + b'
-')
+        ew11.write(ew11_id.encode('utf-8') + b'\n')
         ew11.read_until(b'password:')
-        ew11.write(ew11_password.encode('utf-8') + b'
-')
-        ew11.write('Restart'.encode('utf-8') + b'
-')
+        ew11.write(ew11_password.encode('utf-8') + b'\n')
+        ew11.write('Restart'.encode('utf-8') + + b'\n')
         ew11.read_until(b'Restart..')
         
         log('[INFO] EW11 리셋 완료')
