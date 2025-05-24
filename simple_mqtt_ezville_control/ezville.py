@@ -303,11 +303,7 @@ def ezville_loop(config):
         
     # MQTT 메시지 Callback
     def on_message(client, userdata, msg):
-        log(f"[DEBUG] MQTT message received: topic={message.topic}, payload={message.payload}")
-        nonlocal MSG_QUEUE
-        nonlocal MQTT_ONLINE
-        nonlocal startup_delay
-        
+        log(f"[DEBUG] MQTT message received: topic={message.topic}, payload={message.payload}")        
         if msg.topic == 'homeassistant/status':
             # Reboot Control 사용 시 MQTT Integration의 Birth/Last Will Testament Topic은 바로 처리
             if REBOOT_CONTROL:
@@ -335,10 +331,7 @@ def ezville_loop(config):
 
     # MQTT message를 분류하여 처리
     async def process_message():
-        # MSG_QUEUE의 message를 하나씩 pop
-        nonlocal MSG_QUEUE
-        nonlocal last_received_time
-        
+        # MSG_QUEUE의 message를 하나씩 pop        
         stop = False
         while not stop:
             if MSG_QUEUE.empty():
@@ -357,11 +350,7 @@ def ezville_loop(config):
                    
     
     # EW11 전달된 메시지 처리
-    async def EW11_process(raw_data):
-        nonlocal DISCOVERY_LIST
-        nonlocal RESIDUE
-        nonlocal MSG_CACHE
-        nonlocal DEVICE_STATE       
+    async def EW11_process(raw_data):        nonlocal DEVICE_STATE       
         
         raw_data = RESIDUE + raw_data
         
@@ -669,8 +658,6 @@ def ezville_loop(config):
     
     # 장치 State를 MQTT로 Publish
     async def update_state(device, state, id1, id2, value):
-        nonlocal DEVICE_STATE
-
         deviceID = '{}_{:0>2d}_{:0>2d}'.format(device, id1, id2)
         key = deviceID + state
         
@@ -688,8 +675,6 @@ def ezville_loop(config):
     
     # HA에서 전달된 메시지 처리        
     async def HA_process(topics, value):
-        nonlocal CMD_QUEUE
-
         device_info = topics[1].split('_')
         device = device_info[0]
         
@@ -868,9 +853,7 @@ def ezville_loop(config):
                         
             if comm_mode == 'mqtt':
                 mqtt_client.publish(EW11_SEND_TOPIC, bytes.fromhex(send_data['sendcmd']))
-            else:
-                nonlocal soc
-                try:
+            else:                try:
                     soc.sendall(bytes.fromhex(send_data['sendcmd']))
                 except OSError:
                     soc.close()
@@ -930,7 +913,7 @@ def ezville_loop(config):
         ew11 = telnetlib.Telnet(ew11_server)
 
         ew11.read_until(b'login:')
-        ew11.write(ew11_id.encode('utf-8') + b'
+        ew11.write(ew11_id.encode('utf-8') + b'\n'
 ')
         ew11.read_until(b'password:')
         ew11.write(ew11_password.encode('utf-8') + b'
@@ -967,10 +950,7 @@ def ezville_loop(config):
         socket.connect((SOC_ADDRESS, SOC_PORT))
     
 
-    async def serial_recv_loop():
-        nonlocal soc
-        nonlocal MSG_QUEUE
-        
+    async def serial_recv_loop():        
         class MSG:
             topic = ''
             payload = bytearray()
@@ -993,11 +973,7 @@ def ezville_loop(config):
             await asyncio.sleep(SERIAL_RECV_DELAY) 
         
         
-    async def state_update_loop():
-        nonlocal foreasonCodee_target_time
-        nonlocal foreasonCodee_stop_time
-        nonlocal FORCE_UPDATE
-        
+    async def state_update_loop():        
         while True:
             await process_message()                    
             
@@ -1019,9 +995,7 @@ def ezville_loop(config):
             await asyncio.sleep(STATE_LOOP_DELAY)
             
             
-    async def command_loop():
-        nonlocal CMD_QUEUE
-        
+    async def command_loop():        
         while True:
             if not CMD_QUEUE.empty():
                 send_data = await CMD_QUEUE.get()
@@ -1032,11 +1006,7 @@ def ezville_loop(config):
  
 
     # EW11 재실행 시 리스타트 실시
-    async def restart_control():
-        nonlocal mqtt_client
-        nonlocal restart_flag
-        nonlocal MQTT_ONLINE
-        
+    async def restart_control():        
         while True:
             if restart_flag or (not MQTT_ONLINE and ADDON_STARTED and REBOOT_CONTROL):
                 if restart_flag:
@@ -1050,9 +1020,7 @@ def ezville_loop(config):
                 # MTTQ 및 socket 연결 종료
                 log('[WARNING] 모든 통신 종료')
                 mqtt_client.loop_stop()
-                if comm_mode == 'mixed' or comm_mode == 'socket':
-                    nonlocal soc
-                    soc.close()
+                if comm_mode == 'mixed' or comm_mode == 'socket':                    soc.close()
                        
                 # flag 원복
                 restart_flag = False
