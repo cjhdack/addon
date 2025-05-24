@@ -854,7 +854,8 @@ def ezville_loop(config):
                         
             if comm_mode == 'mqtt':
                 mqtt_client.publish(EW11_SEND_TOPIC, bytes.fromhex(send_data['sendcmd']))
-            else:                try:
+            else:
+                try:
                     soc.sendall(bytes.fromhex(send_data['sendcmd']))
                 except OSError:
                     soc.close()
