@@ -303,7 +303,7 @@ def ezville_loop(config):
         
     # MQTT 메시지 Callback
     def on_message(client, userdata, msg):
-        log(f"[DEBUG] MQTT message received: topic={message.topic}, payload={message.payload}")        
+        log(f"[DEBUG] MQTT message received: topic={msg.topic}, payload={msg.payload}")        
         if msg.topic == 'homeassistant/status':
             # Reboot Control 사용 시 MQTT Integration의 Birth/Last Will Testament Topic은 바로 처리
             if REBOOT_CONTROL:
